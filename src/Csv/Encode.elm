@@ -3,7 +3,7 @@ module Csv.Encode exposing (Csv, toBytes, toEncoder, toString)
 {-| This module provides support for rendering data in csv (comma separateed
 values) format. The format emitted is as desribed in [RFC4180][1].
 
-If you want to _parse_ csv files, look at the package `lavosa/elm-csv`.
+If you want to _parse_ csv files, look at the package `periodic/elm-csv`.
 
 @doc toString, toBytes, toEncoder
 
@@ -17,7 +17,7 @@ import Bytes.Encode as E
 
 
 {-| The `Csv` type structure. This is the same as the `Csv`
-type from `lavosa/elm-csv`.
+type from `periodic/elm-csv`.
 -}
 type alias Csv =
     { headers : List String

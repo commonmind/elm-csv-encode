@@ -2,7 +2,7 @@ module TestMain exposing (suite)
 
 {-| Tests for the csv encoder.
 
-We test against `lavosa/elm-csv` for decoding.
+We test against `periodic/elm-csv` for decoding.
 
 -}
 
@@ -26,6 +26,6 @@ suite =
         "Encode-then-decode should do nothing."
         (\csv ->
             Expect.equal
-                csv
+                (Ok csv)
                 (Csv.parse (E.toString csv))
         )
