@@ -106,4 +106,13 @@ formatField =
                         String.fromChar c
             )
         >> String.concat
-        >> (\s -> "\"" ++ s ++ "\"")
+        >> (\s -> "\"" ++ escapeString s ++ "\"")
+
+
+{-| Escape double quotes in a string.
+-}
+escapeString : String -> String
+escapeString =
+    -- In csv, double quotes are escaped by duplicating them:
+    String.split "\""
+        >> String.join "\"\""
