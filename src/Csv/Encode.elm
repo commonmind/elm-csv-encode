@@ -1,6 +1,14 @@
-module FormatCsv exposing (Csv, crlf, encodeBytes, toBytes)
+module Csv.Encode exposing (Csv, toBytes, toEncoder)
 
-{-| This module provides support for rendering data in csv format.
+{-| This module provides support for rendering data in csv (comma separateed
+values) format. The format emitted is as desribed in [RFC4180][1].
+
+If you want to _parse_ csv files, look at the package `lavosa/elm-csv`.
+
+@doc toBytes, toEncoder
+
+[1]: https://tools.ietf.org/html/rfc4180
+
 -}
 
 import Bytes exposing (Bytes)
@@ -8,7 +16,7 @@ import Bytes.Encode as E
 
 
 {-| The `Csv` type structure. This is the same as the `Csv`
-type from "lavosa/elm-csv".
+type from `lavosa/elm-csv`.
 -}
 type alias Csv =
     { headers : List String
@@ -16,16 +24,18 @@ type alias Csv =
     }
 
 
-{-| Render a `Csv` to a csv file, per rfc4180.
+{-| A bytes encoder for `Csv`s
 -}
-encodeBytes : Csv -> E.Encoder
-encodeBytes { headers, records } =
+toEncoder : Csv -> E.Encoder
+toEncoder { headers, records } =
     formatLines (headers :: records)
 
 
+{-| Convert a `Csv` to bytes.
+-}
 toBytes : Csv -> Bytes
 toBytes =
-    encodeBytes >> E.encode
+    toEncoder >> E.encode
 
 
 formatLines : List (List String) -> E.Encoder
@@ -37,19 +47,17 @@ formatLines =
 
 {-| Encode the string `"\r\n"`.
 
-This is used as a line separator in the csv format, as well as other protocols
-and file formats (HTTP, windows text files, ...).
+This is used as a line separator in the csv format (as well as other protocols
+and file formats like HTTP, windows text files, ...).
 
-Originally, we defined a constant string for this because elm-format insists on
-replacing the `"\r"` escape sequence with `"\u{000D}"`, which is comparatively
-unreadable. The constant seemed an easier solution that fighting with a tool.
+`elm-format` insists on replacing the `"\r"` escape sequence with `"\u{000D}"`,
+which is comparatively unreadable. A constant seemed like an easier solution
+than fighting with a tool.
 
 I(isd) submitted a patch to change the behavior, but the maintainer doesn't seem
 to be terribly interested in merging it:
 
 <https://github.com/avh4/elm-format/pull/515>
-
-Now that we've switched over to using elm/bytes, it's an encoder, not a string.
 
 -}
 crlf : E.Encoder
