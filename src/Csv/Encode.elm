@@ -45,7 +45,10 @@ type alias Csv =
 -}
 toEncoder : Csv -> E.Encoder
 toEncoder { headers, records } =
-    formatLines (headers :: records)
+    E.sequence
+        [ formatLines (headers :: records)
+        , crlf
+        ]
 
 
 {-| Convert a `Csv` to bytes.
