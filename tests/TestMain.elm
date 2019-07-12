@@ -1,3 +1,11 @@
+module TestMain exposing (suite)
+
+{-| Tests for the csv encoder.
+
+We test against `periodic/elm-csv` for decoding.
+
+-}
+
 -- Copyright (C) 2019 CommonMind LLC
 --
 -- This program is free software: you can redistribute it and/or modify
@@ -12,15 +20,6 @@
 --
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-module TestMain exposing (suite)
-
-{-| Tests for the csv encoder.
-
-We test against `periodic/elm-csv` for decoding.
-
--}
 
 import Csv
 import Csv.Encode as E

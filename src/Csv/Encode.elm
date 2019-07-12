@@ -1,3 +1,17 @@
+module Csv.Encode exposing (Csv, toBytes, toEncoder, toString)
+
+{-| This module provides support for rendering data in csv (comma separateed
+values) format. The format emitted is as described in [RFC4180][1].
+
+If you want to _parse_ csv files, look at the package `periodic/elm-csv`;
+this package is designed to work well with it.
+
+@doc toString, toBytes, toEncoder
+
+[1]: https://tools.ietf.org/html/rfc4180
+
+-}
+
 -- Copyright (C) 2019 CommonMind LLC
 --
 -- This program is free software: you can redistribute it and/or modify
@@ -12,21 +26,6 @@
 --
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-module Csv.Encode exposing (Csv, toBytes, toEncoder, toString)
-
-{-| This module provides support for rendering data in csv (comma separateed
-values) format. The format emitted is as described in [RFC4180][1].
-
-If you want to _parse_ csv files, look at the package `periodic/elm-csv`;
-this package is designed to work well with it.
-
-@doc toString, toBytes, toEncoder
-
-[1]: https://tools.ietf.org/html/rfc4180
-
--}
 
 import Bytes exposing (Bytes)
 import Bytes.Decode as D
