@@ -110,19 +110,8 @@ formatRow =
 
 
 formatField : String -> String
-formatField =
-    String.toList
-        >> List.map
-            (\c ->
-                case c of
-                    '"' ->
-                        "\"\""
-
-                    _ ->
-                        String.fromChar c
-            )
-        >> String.concat
-        >> (\s -> "\"" ++ escapeString s ++ "\"")
+formatField s =
+    "\"" ++ escapeString s ++ "\""
 
 
 {-| Escape double quotes in a string.
