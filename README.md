@@ -1,5 +1,11 @@
 Generate CSV files with Elm.
 
+Note: if you're viewing this README on GitHub, be aware that this is a
+mirror of our [GitLab repo][2]; please open issues and pull requests
+there.
+
+# Introduction
+
 This package provides support for rendering data in csv (comma
 separateed values) format. The format emitted is as described in
 [RFC4180][1].
@@ -7,11 +13,8 @@ separateed values) format. The format emitted is as described in
 If you want to _parse_ csv files, look at the package
 `periodic/elm-csv`; this package is designed to work well with it.
 
-Note: if you're viewing this README on GitHub, note that this is a
-mirror of our [GitLab repo][2]; please open issues and pull requests
-there.
+# License
 
-```
 Copyright (C) 2019 CommonMind LLC
 
 This program is free software: you can redistribute it and/or modify
@@ -26,7 +29,6 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
-```
 
 [1]: https://tools.ietf.org/html/rfc4180
 [2]: https://gitlab.com/commonmind/elm-csv-encode
