@@ -1,14 +1,15 @@
-module Csv.Encode exposing (Csv, toString, toBytes, toEncoder)
+module Csv.Encode exposing
+    ( Csv, toString, toBytes, toEncoder
+    , toBytesWith, toEncoderWith, toStringWith
+    )
 
 {-| This module provides support for rendering data in csv (comma separateed
 values) format. The format emitted is as described in [RFC4180][1].
-
 If you want to _parse_ csv files, look at the package `periodic/elm-csv`;
 this package is designed to work well with it.
 
 @docs Csv, toString, toBytes, toEncoder
-
-[1]: https://tools.ietf.org/html/rfc4180
+@docs [1]: https://tools.ietf.org/html/rfc4180
 
 -}
 
@@ -41,12 +42,30 @@ type alias Csv =
     }
 
 
-{-| A bytes encoder for `Csv`s
+type alias EncodeSettings =
+    { quoted : Bool
+    , delimiter : String
+    }
+
+
+defaultEncodeSettings : EncodeSettings
+defaultEncodeSettings =
+    { quoted = True, delimiter = "," }
+
+
+{-| A bytes encoder for `Csv`s.
 -}
 toEncoder : Csv -> E.Encoder
-toEncoder { headers, records } =
+toEncoder =
+    toEncoderWith defaultEncodeSettings
+
+
+{-| A bytes encoder for `Csv`s with `EncodeSettings`.
+-}
+toEncoderWith : EncodeSettings -> Csv -> E.Encoder
+toEncoderWith setts { headers, records } =
     E.sequence
-        [ formatLines (headers :: records)
+        [ formatLines setts (headers :: records)
         , crlf
         ]
 
@@ -55,16 +74,30 @@ toEncoder { headers, records } =
 -}
 toBytes : Csv -> Bytes
 toBytes =
-    toEncoder >> E.encode
+    toBytesWith defaultEncodeSettings
+
+
+{-| Convert a `Csv` to bytes with `EncodeSettings`.
+-}
+toBytesWith : EncodeSettings -> Csv -> Bytes
+toBytesWith setts =
+    toEncoderWith setts >> E.encode
 
 
 {-| Convert a `Csv` to a string.
 -}
 toString : Csv -> String
-toString csv =
+toString =
+    toStringWith defaultEncodeSettings
+
+
+{-| Convert a `Csv` to a string with `EncodeSettings`.
+-}
+toStringWith : EncodeSettings -> Csv -> String
+toStringWith setts csv =
     let
         bytes =
-            toBytes csv
+            toBytesWith setts csv
     in
     case D.decode (D.string (Bytes.width bytes)) bytes of
         Just v ->
@@ -77,44 +110,43 @@ toString csv =
             toString csv
 
 
-formatLines : List (List String) -> E.Encoder
-formatLines =
-    List.map formatRow
+formatLines : EncodeSettings -> List (List String) -> E.Encoder
+formatLines setts =
+    List.map (formatRow setts)
         >> List.intersperse crlf
         >> E.sequence
 
 
 {-| Encode the string `"\r\n"`.
-
 This is used as a line separator in the csv format (as well as other protocols
 and file formats like HTTP, windows text files, ...).
-
 `elm-format` insists on replacing the `"\r"` escape sequence with `"\u{000D}"`,
 which is comparatively unreadable. A constant seemed like an easier solution
 than fighting with a tool.
-
 I(isd) submitted a patch to change the behavior, but the maintainer doesn't seem
 to be terribly interested in merging it:
-
 <https://github.com/avh4/elm-format/pull/515>
-
 -}
 crlf : E.Encoder
 crlf =
     E.string "\u{000D}\n"
 
 
-formatRow : List String -> E.Encoder
-formatRow =
-    List.map formatField
-        >> List.intersperse ","
+formatRow : EncodeSettings -> List String -> E.Encoder
+formatRow ({ delimiter } as setts) =
+    List.map (formatField setts)
+        >> List.intersperse delimiter
         >> List.map E.string
         >> E.sequence
 
 
-formatField : String -> String
-formatField s =
-    "\"" ++ escapeString s ++ "\""
+formatField : EncodeSettings -> String -> String
+formatField { quoted, delimiter } s =
+    if quoted || String.contains delimiter s then
+        "\"" ++ escapeString s ++ "\""
+
+    else
+        escapeString s
 
 
 {-| Escape double quotes in a string.
