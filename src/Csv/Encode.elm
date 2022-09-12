@@ -42,13 +42,13 @@ type alias Csv =
     }
 
 
-type alias EncodeSettings =
+type alias Settings =
     { quoted : Bool
     , delimiter : String
     }
 
 
-defaultEncodeSettings : EncodeSettings
+defaultEncodeSettings : Settings
 defaultEncodeSettings =
     { quoted = True, delimiter = "," }
 
@@ -60,9 +60,9 @@ toEncoder =
     toEncoderWith defaultEncodeSettings
 
 
-{-| A bytes encoder for `Csv`s with `EncodeSettings`.
+{-| A bytes encoder for `Csv`s with `Settings`.
 -}
-toEncoderWith : EncodeSettings -> Csv -> E.Encoder
+toEncoderWith : Settings -> Csv -> E.Encoder
 toEncoderWith setts { headers, records } =
     E.sequence
         [ formatLines setts (headers :: records)
@@ -77,9 +77,9 @@ toBytes =
     toBytesWith defaultEncodeSettings
 
 
-{-| Convert a `Csv` to bytes with `EncodeSettings`.
+{-| Convert a `Csv` to bytes with `Settings`.
 -}
-toBytesWith : EncodeSettings -> Csv -> Bytes
+toBytesWith : Settings -> Csv -> Bytes
 toBytesWith setts =
     toEncoderWith setts >> E.encode
 
@@ -91,9 +91,9 @@ toString =
     toStringWith defaultEncodeSettings
 
 
-{-| Convert a `Csv` to a string with `EncodeSettings`.
+{-| Convert a `Csv` to a string with `Settings`.
 -}
-toStringWith : EncodeSettings -> Csv -> String
+toStringWith : Settings -> Csv -> String
 toStringWith setts csv =
     let
         bytes =
@@ -110,7 +110,7 @@ toStringWith setts csv =
             toString csv
 
 
-formatLines : EncodeSettings -> List (List String) -> E.Encoder
+formatLines : Settings -> List (List String) -> E.Encoder
 formatLines setts =
     List.map (formatRow setts)
         >> List.intersperse crlf
@@ -132,7 +132,7 @@ crlf =
     E.string "\u{000D}\n"
 
 
-formatRow : EncodeSettings -> List String -> E.Encoder
+formatRow : Settings -> List String -> E.Encoder
 formatRow ({ delimiter } as setts) =
     List.map (formatField setts)
         >> List.intersperse delimiter
@@ -140,7 +140,7 @@ formatRow ({ delimiter } as setts) =
         >> E.sequence
 
 
-formatField : EncodeSettings -> String -> String
+formatField : Settings -> String -> String
 formatField { quoted, delimiter } s =
     if quoted || String.contains delimiter s then
         "\"" ++ escapeString s ++ "\""
