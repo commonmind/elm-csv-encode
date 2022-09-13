@@ -9,7 +9,8 @@ If you want to _parse_ csv files, look at the package `periodic/elm-csv`;
 this package is designed to work well with it.
 
 @docs Csv, toString, toBytes, toEncoder
-@docs [1]: https://tools.ietf.org/html/rfc4180
+
+[1]: https://tools.ietf.org/html/rfc4180
 
 -}
 
