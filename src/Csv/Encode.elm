@@ -42,9 +42,9 @@ type alias Csv =
     }
 
 
-{-| This type is for encode settings. `delimiter` is the CSV delimiter
-and can be more than one charcater. If `alwaysQuoted` is `False` only
-those values are quoted that contain a quote character (`"`).
+{-| This type is for encode settings. `delimiter` is the CSV
+delimiter. If `alwaysQuoted` is `False` only those values are quoted
+that contain a quote character (`"`).
 -}
 type alias Settings =
     { alwaysQuoted : Bool
