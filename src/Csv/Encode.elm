@@ -48,8 +48,8 @@ type alias Settings =
     }
 
 
-defaultEncodeSettings : Settings
-defaultEncodeSettings =
+defaultSettings : Settings
+defaultSettings =
     { quoted = True, delimiter = "," }
 
 
@@ -57,7 +57,7 @@ defaultEncodeSettings =
 -}
 toEncoder : Csv -> E.Encoder
 toEncoder =
-    toEncoderWith defaultEncodeSettings
+    toEncoderWith defaultSettings
 
 
 {-| A bytes encoder for `Csv`s with `Settings`.
@@ -74,7 +74,7 @@ toEncoderWith setts { headers, records } =
 -}
 toBytes : Csv -> Bytes
 toBytes =
-    toBytesWith defaultEncodeSettings
+    toBytesWith defaultSettings
 
 
 {-| Convert a `Csv` to bytes with `Settings`.
@@ -88,7 +88,7 @@ toBytesWith setts =
 -}
 toString : Csv -> String
 toString =
-    toStringWith defaultEncodeSettings
+    toStringWith defaultSettings
 
 
 {-| Convert a `Csv` to a string with `Settings`.
