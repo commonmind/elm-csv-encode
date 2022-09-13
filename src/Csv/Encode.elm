@@ -42,15 +42,19 @@ type alias Csv =
     }
 
 
+{-| This type is for encode settings. `delimiter` is the CSV delimiter
+and can be more than one charcater. If `alwaysQuoted` is `False` only
+those values are quoted that contain a quote character (`"`).
+-}
 type alias Settings =
-    { quoted : Bool
+    { alwaysQuoted : Bool
     , delimiter : String
     }
 
 
 defaultSettings : Settings
 defaultSettings =
-    { quoted = True, delimiter = "," }
+    { alwaysQuoted = True, delimiter = "," }
 
 
 {-| A bytes encoder for `Csv`s.
@@ -141,8 +145,8 @@ formatRow ({ delimiter } as setts) =
 
 
 formatField : Settings -> String -> String
-formatField { quoted, delimiter } s =
-    if quoted || String.contains delimiter s then
+formatField { alwaysQuoted, delimiter } s =
+    if alwaysQuoted || String.contains delimiter s then
         "\"" ++ escapeString s ++ "\""
 
     else
