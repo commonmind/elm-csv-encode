@@ -1,14 +1,11 @@
-module Csv.Encode exposing
-    ( Csv, toString, toBytes, toEncoder
-    , toBytesWith, toEncoderWith, toStringWith
-    )
+module Csv.Encode exposing (Csv, toString, toStringWith, toBytes, toBytesWith, toEncoder, toEncoderWith)
 
 {-| This module provides support for rendering data in csv (comma separateed
 values) format. The format emitted is as described in [RFC4180][1].
 If you want to _parse_ csv files, look at the package `periodic/elm-csv`;
 this package is designed to work well with it.
 
-@docs Csv, toString, toBytes, toEncoder
+@docs Csv, toString, toStringWith, toBytes, toBytesWith, toEncoder, toEncoderWith
 
 [1]: https://tools.ietf.org/html/rfc4180
 
